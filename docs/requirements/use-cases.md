@@ -1892,6 +1892,10 @@ Supervised teams shall be organized by section names.
   - A student whose submission window has closed is **not** a non-submitter for a nudge, because the nudge cannot help and the missed evaluation cannot be made up (BR-evaluation-submission-window).
   - A student who submitted and then deleted what she submitted has no active submission, so she **is** a non-submitter.
 - Reminder delivery: each reminder is delivered as an email to the student's registered address, consistent with the existing weekly reminder (FR-NOT-weekly-reminder).
+- Deactivated students are not non-submitters: a student whose account is deactivated cannot log in or submit (BR-student-lifecycle), so she is excluded from the non-submitter list and is not nudged.
+- When the instructor selects both artifacts for a week, a student missing both receives one reminder email covering both, not two separate emails.
+- The system records each nudge it sends (student, artifact, week, timestamp), so that BR-nudge-frequency can be enforced on later attempts.
+- A course admin may perform this use case for a course section she owns; BR-role-based-access grants her every instructor capability.
 - The instructor shall be able to cancel the use case at any time prior to confirming the send (step 6).
 
 **Related Use Cases:** Sibling work not specified here: a use case in which the instructor views the list of non-submitters without nudging them, and the change to the scheduled reminder (FR-NOT-weekly-reminder) so that it skips students who have already submitted.
