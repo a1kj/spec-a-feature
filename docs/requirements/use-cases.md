@@ -1834,6 +1834,72 @@ Supervised teams shall be organized by section names.
 **Assumptions:**
 **Open Issues:**
 
+### **UC-INS-nudge-non-submitters: The instructor nudges the non-submitting students of a course section**
+
+**UC ID and Name:** UC-INS-nudge-non-submitters: Nudge the non-submitting students of a course section
+**Created By:**
+**Date Created:**
+**Primary Actor:** instructor
+**Secondary Actors:** student
+**Trigger:** The instructor indicates to send a reminder to the students in one of her course sections who have not submitted a required artifact for an active week.
+**Description:** The instructor wants to send a targeted reminder to only the students who have not yet submitted a required artifact — the weekly activity report or the peer evaluation — for a given active week, so that students who have already submitted are not reminded again.
+
+**Preconditions:**
+- PRE-1. The instructor is logged into the system.
+- PRE-2. The instructor is assigned to the course section (BR-section-scoped-access).
+- PRE-3. The course section has at least one active week configured (BR-active-weeks).
+
+**Postconditions:**
+- POST-1. A reminder email is sent to each student in the course section who has not submitted the specified artifact for the specified active week, subject to BR-nudge-frequency.
+- POST-2. The instructor is told how many reminders were sent, which students were skipped under BR-nudge-frequency, and which addresses could not be emailed.
+
+**Main Success Scenario:**
+1. The instructor indicates to nudge the non-submitting students of a course section she is assigned to.
+2. The system asks the instructor to select the active week and the artifact — the weekly activity report, the peer evaluation, or both.
+3. The instructor selects the active week and the artifact and confirms.
+4. The system determines, for the selected week and artifact, the students who are non-submitters according to the "Definition of a non-submitter" in the Associated Information of this use case.
+5. The system displays the list of non-submitting students and how many there are.
+6. The instructor either confirms sending the reminders (continues the normal flow) or cancels the use case.
+7. The system sends a reminder email to each listed student, subject to BR-nudge-frequency.
+8. The system informs the instructor of how many reminders were sent, which students were skipped under BR-nudge-frequency, and which addresses could not be emailed.
+9. Use case ends.
+
+**Extensions:**
+- **4a. No non-submitting students are found:**
+  - 4a1. The system informs the instructor that every student has already submitted the selected artifact for the selected week.
+  - 4a2. Use case ends.
+- **3a. The instructor selects a week that is not one of the course section's active weeks:**
+  - 3a1. The system does not accept the selection and informs the instructor that reminders may be sent only for a course section's active weeks (BR-active-weeks).
+  - 3a2. Use case ends.
+- **7a. The instructor has already nudged the same student for the same artifact and week the maximum number of times allowed today (BR-nudge-frequency):**
+  - 7a1. The system skips that student and does not send another reminder.
+  - 7a2. The system includes that student in the reported skipped list.
+  - 7a3. Continues at step 8 of the normal flow.
+- **7b. The mail server rejects one or more addresses:**
+  - 7b1. The system continues with the remaining addresses rather than abandoning the batch.
+  - 7b2. The system reports to the instructor which addresses it could not email, so that she can follow up another way.
+  - 7b3. Continues at step 8 of the normal flow.
+
+**Priority:** Medium
+**Frequency of Use:** 1 user (instructor), up to a few usages per active week.
+**Business Rules:** BR-section-scoped-access, BR-active-weeks, BR-team-assignment-required, BR-evaluation-submission-window, BR-nudge-frequency
+
+**Associated Information:**
+- Definition of a non-submitter, for a given active week and artifact:
+  - **Weekly activity report:** a student is a non-submitter if she is assigned to a team (BR-team-assignment-required), the week is one of the course section's active weeks (BR-active-weeks), and she has no active weekly activity report submission for that week.
+  - **Peer evaluation:** a student is a non-submitter if she is assigned to a team (BR-team-assignment-required), the evaluated week is one of the course section's active weeks (BR-active-weeks), the submission window for that evaluated week is still open (BR-evaluation-submission-window), and she has no active peer evaluation submission for that week.
+  - A student who is not assigned to a team is **not** a non-submitter and is not nudged, because she cannot submit either artifact (BR-team-assignment-required).
+  - A student whose submission window has closed is **not** a non-submitter for a nudge, because the nudge cannot help and the missed evaluation cannot be made up (BR-evaluation-submission-window).
+  - A student who submitted and then deleted what she submitted has no active submission, so she **is** a non-submitter.
+- Reminder delivery: each reminder is delivered as an email to the student's registered address, consistent with the existing weekly reminder (FR-NOT-weekly-reminder).
+- The instructor shall be able to cancel the use case at any time prior to confirming the send (step 6).
+
+**Related Use Cases:** Sibling work not specified here: a use case in which the instructor views the list of non-submitters without nudging them, and the change to the scheduled reminder (FR-NOT-weekly-reminder) so that it skips students who have already submitted.
+**Assumptions:**
+- The system already records, per student, per active week, per artifact, whether an active submission exists.
+- The instructor's visibility of submission status is bounded by BR-section-scoped-access.
+**Open Issues:**
+
 ## **Account**
 
 ### **UC-ACC-setup-student-account: The student sets up a student account**
